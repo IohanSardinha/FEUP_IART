@@ -111,6 +111,7 @@ def deal(board):
     
 
 def removePiece(p1, p2, board):
+    
     board[p1[1]][p1[0]] = 0
     board[p2[1]][p2[0]] = 0
 
