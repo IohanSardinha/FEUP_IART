@@ -10,6 +10,12 @@ def showBoard(board, moves):
         print("-"*24)
     print("Moves: "+str(moves))
 
+def win(board):
+    for line in board:
+        if not sum(line) == 0:
+            return False
+    return True
+
 def validRemove(p1, p2, board):
     x = 0
     y = 1
@@ -107,12 +113,15 @@ def deal(board):
 def removePiece(p1, p2, board):
     board[p1[1]][p1[0]] = 0
     board[p2[1]][p2[0]] = 0
+
+    board = list(filter(lambda x: not sum(x) == 0, board))
+    
     return board
 
 def initialState():
-    return [[1,2,3,4,5,6,7,8,9],
-         [1,1,1,2,1,3,1,4,1],
-         [5,1,6,1,7,1,8,1,9]], 0
+    return [[1,2,3,4,5,6,7,8,9],  
+            [1,1,1,2,1,3,1,4,1],
+            [5,1,6,1,7,1,8,1,9]], 0
 
 def main():
     board,moves = initialState()
