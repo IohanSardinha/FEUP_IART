@@ -34,6 +34,7 @@ def pieceClick(board, moves, i, j, value):
 
     elif validRemove((i,j), selectedPiece, board):
         board = removePiece((i, j), selectedPiece, board)
+        print(board)
         moves += 1
         selectedPiece = (-1,-1)
     else:
@@ -52,7 +53,7 @@ def main():
 
     running = True
 
-    level = 4
+    level = 2
 
     board, moves = initialState(level)
     fontsmall = pygame.font.SysFont('Arial', 20)
