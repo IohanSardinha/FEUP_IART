@@ -1,21 +1,24 @@
 from tenpair import *
 from time import time
+from os import system
 
-'''class Node(object):
-    def __init__(self, data, value):
+class Node(object):
+    def __init__(self, data):
         self.data = data
-        self.value = value
         self.edges = []
+        self.parents = []
 
     def add_edge(self, obj):
         self.edges.append(obj)
 
 class Edge(object):
-    def __init__(self, data, node):
+    def __init__(self, data, fromNode, toNode):
         self.data = data
-        self.node = node'''
-
-class Node(object):
+        toNode.parents.append(self)
+        self.fromNode = fromNode
+        self.toNode = toNode
+    
+'''class Node(object):
     def __init__(self, data):
         self.data = data
         self.children = []
@@ -23,7 +26,7 @@ class Node(object):
 
     def add_child(self, obj):
         self.children.append(obj)
-        obj.parent = self
+        obj.parent = self'''
 
 def getPossibleMoves(position,board):
     x = 0
@@ -115,7 +118,7 @@ def getAllBoards(board):
     for move,(j,i) in getAllMovesInBoard(board):
         newBoard = [l[:] for l in board]
         newBoard = removePiece((j,i), move, newBoard)
-        boards.append(newBoard)
+        boards.append((((j,i),move),newBoard))
 
     #newBoard = [l[:] for l in board]
     #boards.append(deal(newBoard))
@@ -123,56 +126,65 @@ def getAllBoards(board):
     
 def BFS(board):
 
+    root = Node(board)
+
     boards = getAllBoards(board)
     newBoard = [l[:] for l in board]
-    boards.append(deal(newBoard))
-
-    root = Node(board)
+    boards.append(("deal", deal(newBoard)))
 
     queue = []
 
     visited = []
     skip = 0
     
-    for b in boards:
+    for move, b in boards:
         node = Node(b)
-        root.add_child(node)
+        edge = Edge(move, root, node)
+
+        root.add_edge(edge)
         queue.append(node)
 
-    while queue:                
+    while queue:
         node = queue.pop(0)
-
+        
         visited.append(str(node.data))
-
-        if len(visited) > 99999:
-            showBoard(node.data,0)
-            break
 
         if win(node.data):
             print("win")
             return node
 
-        for b in getAllBoards(node.data):
-            if str(b) in visited:
+        for move, b in getAllBoards(node.data):                
+            
+            if str(b) in visited:                    
                 skip += 1
                 continue
+            #print(move)
             
             child = Node(b)
-            node.add_child(child)
+            edge = Edge(move, node, child)
+            node.add_edge(edge)
             queue.append(child)
             visited.append(str(b))
     
     
 
-board, moves = initialState()
+board, moves = initialState(2)
 
 start = time()
 
-BFS(board)
+result = BFS(board)
 
 end = time()
 
-print("Done in :" + str(end - start) + " seconds")
+path = []
+while result.parents != []:
+    path.append(result.parents[0].data)
+    result = result.parents[0].fromNode
+for move in path[::-1]:
+    print(move)
+    
+print("Done in: " + str(end - start) + " seconds")
+
 
 
 

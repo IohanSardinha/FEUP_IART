@@ -26,33 +26,33 @@ def validRemove(p1, p2, board):
     if board[p1[y]][p1[x]] + board[p2[y]][p2[x]] == 10 or board[p1[y]][p1[x]] == board[p2[y]][p2[x]]:
 
         #[1][2]
-        if p2[x] == p1[x] + 1 and p2[y] == p1[y]: 
-           return True;
+        if p2[x] == p1[x] + 1 and p2[y] == p1[y]:
+            return True
         #[2][1]
         if p1[x] == p2[x] + 1 and p1[y] == p2[y]: 
-           return True;
+            return True
         #[1]
         #[2]
         if p2[y] == p1[y] + 1 and p2[x] == p1[x]: 
-           return True;
+            return True
 
         #[2]
         #[1]
         if p1[y] == p2[y] + 1 and p1[x] == p2[x]: 
-           return True;
+            return True
 
         #[2]
         #[ ]
         #...
         #[1]
-        if p1[x] == p2[x] and sum([board[i][p1[x]] for i in range(p1[y]+1,p2[y])]) == 0:
+        if p1[y] > p2[y] and p1[x] == p2[x] and sum([board[i][p1[x]] for i in range(p2[y]+1,p1[y])]) == 0:
             return True
            
         #[1]
         #[ ]
         #...
         #[2]
-        if p1[x] == p2[x] and sum([board[i][p2[x]] for i in range(p2[y]+1,p1[y])]) == 0:
+        if p2[y] > p1[y] and p1[x] == p2[x] and sum([board[i][p2[x]] for i in range(p1[y]+1,p2[y])]) == 0:
             return True
 
         #[1][ ][ ]..[ ]
@@ -64,7 +64,6 @@ def validRemove(p1, p2, board):
                 if not board[i][j] == 0:
                     return False
         
-        
         #[2][ ][ ]..[ ]
         #[ ]...[1]
         for i in range(p2[y],p1[y]+1):
@@ -73,8 +72,8 @@ def validRemove(p1, p2, board):
             for j in range(start,end):
                 if not board[i][j] == 0:
                     return False                    
-
         return True
+    
     return False
 
 
@@ -119,10 +118,46 @@ def removePiece(p1, p2, board):
     
     return board
 
-def initialState():
-    return [[1,2,3,4,5,6,7,8,9],  
-            [1,1,1,2,1,3,1,4,1],
-            [5,1,6,1,7,1,8,1,9]], 0
+def initialState(level = -1, size=False):
+
+    levels = [
+            [[1,1],  
+             [1,1]],
+
+            #---------------------------------
+            [[1,2,3,4],  
+             [6,7,8,9]],
+
+            #---------------------------------
+            [[2,1,2,1],
+             [1,1,1,1],
+             [2,1,2,1]],
+
+            #---------------------------------
+            [[1,2,1,2],  
+             [3,4,3,4],
+             [1,2,1,2]],
+
+            #---------------------------------
+            [[2,3,4,5,6,7],  
+             [1,1,1,1,1,1],
+             [3,4,5,6,7,8]],
+
+            #---------------------------------
+            [[1,2,3,4,9,6],  
+             [1,1,1,4,1,3],
+             [7,1,7,1,6,8]],
+
+            #---------------------------------
+            [[1,2,3,4,5,6,7,8,9],  
+             [1,1,1,2,1,3,1,4,1],
+             [5,1,6,1,7,1,8,1,9]]
+            ]
+
+    if size:
+        return len(levels)-1
+    
+    return levels[level], 0
 
 def main():
     board,moves = initialState()

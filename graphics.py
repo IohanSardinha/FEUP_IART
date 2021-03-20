@@ -22,8 +22,11 @@ def drawBoard(board, screen, fontsmall, fontbig, moves):
 def pieceClick(board, moves, i, j, value):
 
     global selectedPiece
+
+    if value == 0:
+        pass
     
-    if selectedPiece == (-1,-1):
+    elif selectedPiece == (-1,-1):
         selectedPiece = (i,j)
         
     elif selectedPiece == (i,j):
@@ -49,7 +52,9 @@ def main():
 
     running = True
 
-    board, moves = initialState()
+    level = 2
+
+    board, moves = initialState(level)
     fontsmall = pygame.font.SysFont('Arial', 20)
     fontbig = pygame.font.SysFont('Arial', 30)
 
@@ -71,8 +76,13 @@ def main():
                             board, moves = pieceClick(board, moves, i, j, value)
 
         if win(board):
-            running = False
             print("Congratulations you won in "+str(moves)+" moves!!!")
+            
+            #if level < initialState(size=True):
+             #   level += 1
+              #  board, moves = initialState(level)
+            #else:
+            running = False
         
         pygame.display.update()
         clock.tick(60)
