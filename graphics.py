@@ -52,7 +52,7 @@ def main():
 
     running = True
 
-    level = 2
+    level = 4
 
     board, moves = initialState(level)
     fontsmall = pygame.font.SysFont('Arial', 20)

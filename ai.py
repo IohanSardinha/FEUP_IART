@@ -64,7 +64,7 @@ def getPossibleMoves(position,board):
             
     return moves
 
-'''def buildTree(board, depth):
+def DFS(board, depth):
     node = Node(board, elementsLeft(board))
 
     if depth == 0:
@@ -88,7 +88,7 @@ def getPossibleMoves(position,board):
     edge = Edge(countElements(newBoard), buildTree(deal(newBoard), depth - 1))
     node.add_edge(edge)
 
-    return node'''
+    return node
 
 def countElements(board):
     count = 0
@@ -168,7 +168,7 @@ def BFS(board):
     
     
 
-board, moves = initialState(2)
+board, moves = initialState(5)
 
 start = time()
 
