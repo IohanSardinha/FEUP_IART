@@ -49,7 +49,7 @@ def main():
 
     running = True
 
-    board, moves = initialState()
+    board, moves = initialState(6)
     fontsmall = pygame.font.SysFont('Arial', 20)
     fontbig = pygame.font.SysFont('Arial', 30)
 
