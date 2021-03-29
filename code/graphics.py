@@ -1,5 +1,7 @@
 import pygame
 from tenpair import *
+from time import time
+
 
 selectedPiece = (-1,-1)
 
@@ -34,9 +36,9 @@ def pieceClick(board, moves, i, j, value):
 
     elif validRemove((i,j), selectedPiece, board):
         board = removePiece((i, j), selectedPiece, board)
-        print(board)
         moves += 1
         selectedPiece = (-1,-1)
+        
     else:
         selectedPiece = (-1,-1)
 
@@ -53,9 +55,10 @@ def main():
 
     running = True
 
-    level = 2
+    level = 0
 
     board, moves = initialState(level)
+
     fontsmall = pygame.font.SysFont('Arial', 20)
     fontbig = pygame.font.SysFont('Arial', 30)
 
@@ -67,7 +70,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN:                
                 mousePos = pygame.mouse.get_pos()
                 if dealButton.collidepoint(mousePos):
                     board = deal(board)
@@ -77,13 +80,13 @@ def main():
                             board, moves = pieceClick(board, moves, i, j, value)
 
         if win(board):
-            print("Congratulations you won in "+str(moves)+" moves!!!")
+            print("Congratulations you won level "+str(level)+" in "+str(moves)+" moves!!!")
             
-            #if level < initialState(size=True):
-             #   level += 1
-              #  board, moves = initialState(level)
-            #else:
-            running = False
+            if level < initialState(size=True):
+                level += 1
+                board, moves = initialState(level)
+            else:
+                running = False
         
         pygame.display.update()
         clock.tick(60)

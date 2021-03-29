@@ -93,6 +93,8 @@ def deal(board):
     for line in board:
         dealValues += [value for value in line if not value == 0]
 
+    insertj = 0
+    inserti += 1
     for value in dealValues:
         
         if insertj >= len(board[0]):
@@ -182,5 +184,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
