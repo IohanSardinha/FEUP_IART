@@ -24,7 +24,6 @@ def aStar(board):
         visited.append(str(node.data))
 
         if win(node.data):
-            print("win")
             return node
 
         for move, b in getAllBoards(node.data):                

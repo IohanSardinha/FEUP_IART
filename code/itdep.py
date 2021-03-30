@@ -28,7 +28,6 @@ def IDDFSNode(node, depth):
 def IDDFS(board, maxDepth):
     node = Node(board)
     for i in range(0, maxDepth):
-        print("Calculating depth " + str(i))
         result = IDDFSNode(node, i)
         if not result == False:
             return result
