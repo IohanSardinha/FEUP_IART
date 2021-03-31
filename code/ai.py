@@ -27,6 +27,10 @@ class Edge(object):
         self.fromNode = fromNode
         self.toNode = toNode
 
+def countElements(board):
+    return sum([sum([1 for value in line if not value == 0]) for line in board])
+
+
 def getPossibleMoves(position,board):
     x = 0
     y = 1
@@ -61,9 +65,6 @@ def getPossibleMoves(position,board):
             break
             
     return moves
-
-def countElements(board):
-    return sum([sum([1 for value in line if not value == 0]) for line in board])
 
 def getAllMovesInBoard(board):
     visited = []

@@ -44,17 +44,7 @@ def pieceClick(board, moves, i, j, value):
 
     return board, moves
 
-def main():
-
-    pygame.init()
-    pygame.font.init()
-    pygame.display.set_caption('Tenpair')
-    screen = pygame.display.set_mode((300,600))
-
-    clock = pygame.time.Clock()
-
-    running = True
-
+def humanPlayer(screen, clock):
     level = 0
 
     board, moves = initialState(level)
@@ -62,14 +52,14 @@ def main():
     fontsmall = pygame.font.SysFont('Arial', 20)
     fontbig = pygame.font.SysFont('Arial', 30)
 
-    while running:
+    while True:
         screen.fill((0,0,0))
 
         numbers, dealButton = drawBoard(board, screen, fontsmall, fontbig, moves)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                return False
             if event.type == pygame.MOUSEBUTTONDOWN:                
                 mousePos = pygame.mouse.get_pos()
                 if dealButton.collidepoint(mousePos):
@@ -86,10 +76,41 @@ def main():
                 level += 1
                 board, moves = initialState(level)
             else:
-                running = False
+                return True
         
         pygame.display.update()
-        clock.tick(60)
+        clock.tick(60)    
+
+def mainMenu(screen, clock):
+    while True:
+
+        fontbig = pygame.font.SysFont('Bauhaus 93', 50)
+        screen.blit( fontbig.render("Tenpair", False, (200,200,255)) ,(60, 50))
+
+        play_button =      pygame.draw.rect(screen, (210,210,210), pygame.Rect(60, 150, 170, 50))
+        solve_button =     pygame.draw.rect(screen, (210,210,210), pygame.Rect(60, 210, 170, 50))
+        howtoplay_button = pygame.draw.rect(screen, (210,210,210), pygame.Rect(60, 280, 170, 50))
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+        
+        pygame.display.update()
+        clock.tick(60) 
+
+def main():
+
+    pygame.init()
+    pygame.font.init()
+    pygame.display.set_caption('Tenpair')
+    screen = pygame.display.set_mode((300,600))
+
+    clock = pygame.time.Clock()
+
+    nextScreen = mainMenu(screen, clock)
+    while not nextScreen == False:
+        nextScreen = nextScreen(screen,clock)
+        
     pygame.quit()
 
 

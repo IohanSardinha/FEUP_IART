@@ -16,6 +16,7 @@ def win(board):
             return False
     return True
 
+
 def validRemove(p1, p2, board):
     x = 0
     y = 1
@@ -162,10 +163,11 @@ def initialState(level = -1, size=False):
     return levels[level], 0
 
 def main():
-    board,moves = initialState()
+    board,moves = initialState(0)
 
     while True:
         showBoard(board, moves)
+        
         input1 = input("> ")
         if input1.lower()  == "deal":
             board = deal(board)
@@ -178,6 +180,9 @@ def main():
         if validRemove(p1, p2, board):
             board = removePiece(p1, p2, board)
             moves += 1
+            if win(board):
+                print("You win! Moves: "+str(moves))
+                break
             continue
         
         print("Invalid move!\n\n")
