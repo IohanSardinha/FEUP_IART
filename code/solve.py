@@ -6,18 +6,19 @@ from bfs import BFS
 from dfs import DFS
 from itdep import IDDFS
 from astar import aStar
+from greedy import greedy
 
 def main(argv):
     maxDepth = -1
     if len(argv) == 0:
         level = int(input("Level[0-6]: "))
-        alg = input("Algorithm[BFS,DFS,IDEP,A*]: ")
+        alg = input("Algorithm[BFS, DFS, IDEP, Greedy, A*]: ")
         if alg == 'IDEP':
             maxDepth = int(input("Max depth: "))
 
     elif len(argv) == 1:
         level = int(argv[0])
-        alg = input("Algorithm[BFS,DFS,IDEP,A*]: ")
+        alg = input("Algorithm[BFS, DFS, IDEP, Greedy, A*]: ")
         if alg == 'IDEP':
             maxDepth = int(input("Max depth: "))
             
@@ -48,6 +49,8 @@ def main(argv):
             moves, time_s = timeToRun(lambda : DFS(board), 1)
         elif alg == "IDEP":
             moves, time_s = timeToRun(lambda : IDDFS(board, maxDepth), 1)
+        elif alg == "GREEDY":
+            moves, time_s = timeToRun(lambda : greedy(board), 1)
         elif alg == "A*":
             moves, time_s = timeToRun(lambda : aStar(board), 1)
         else:

@@ -55,7 +55,7 @@ def main():
 
     running = True
 
-    level = 0
+    level = 6
 
     board, moves = initialState(level)
 

@@ -1,8 +1,8 @@
 from ai import *
 
-aStarHeuristic = lambda left, right: left.cost + left.estimation < right.cost + right.estimation
+greedyHeuristic = lambda left, right: left.estimation < right.estimation
 
-def aStar(board, alg=aStarHeuristic):
+def greedy(board, alg=greedyHeuristic):
     
     root = Node(board, 0, countElements(board)//2, alg)
 
