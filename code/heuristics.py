@@ -2,19 +2,14 @@ from ai import *
 
 heuristic = lambda board: countElements(board)//2
 
-pairsHeuristic = lambda board: countElements(board)/countPairs(board)
+heuristic2 = lambda board: countUniqueElements(board)
 
-def countPairs(board):
-  pairs = 0
-  c = 0
+heuristic3 = lambda board: 2*countElements(board) - len(getAllBoards(board))+1
 
-  for i in range (1, 6):
-    for row in board:
-      for cell in row:
-        if cell == i or cell == 10-i:
-          pairs += 1
-      
-    c += pairs/2
-    pairs = 0
+def countUniqueElements(board):
+  li = []
+  for line in board:
+    for el in set(line):
+      li.append(el)
 
-  return c if c != 0 else 0.000001
+  return len(set(li))

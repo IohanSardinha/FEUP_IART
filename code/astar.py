@@ -4,7 +4,7 @@ from heuristics import *
 
 lessthan = lambda left, right: left.cost + left.estimation < right.cost + right.estimation
 
-def aStar(board, alg=heuristic):
+def aStar(board, alg=heuristic3):
     
     root = Node(board, 0, alg(board), lessthan)
 

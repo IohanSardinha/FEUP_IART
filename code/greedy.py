@@ -3,7 +3,7 @@ from heuristics import *
 
 lessthan = lambda left, right: left.estimation < right.estimation
 
-def greedy(board, alg=heuristic):
+def greedy(board, alg=heuristic3):
     
     root = Node(board, 0, alg(board), lessthan)
 
@@ -26,6 +26,8 @@ def greedy(board, alg=heuristic):
         
         visited.append(str(node.data))
         
+        #print(node.parents[0].data)
+        #print(node.estimation)
 
         if win(node.data):
             return node
