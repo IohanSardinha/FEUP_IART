@@ -10,14 +10,14 @@ class Node(object):
         self.parents = []
         self.cost = cost
         self.estimation = estimation
-        self.heuristc = alg
+        self.lessthan = alg
 
     def add_edge(self, obj):
         self.edges.append(obj)
 
 
     def __lt__(self, other):
-        return self.heuristc(self, other)
+        return self.lessthan(self, other)
 
 class Edge(object):
     def __init__(self, data, fromNode, toNode):

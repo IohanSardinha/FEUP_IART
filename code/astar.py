@@ -1,10 +1,12 @@
 from ai import *
+from heuristics import *
 
-aStarHeuristic = lambda left, right: left.cost + left.estimation < right.cost + right.estimation
 
-def aStar(board, alg=aStarHeuristic):
+lessthan = lambda left, right: left.cost + left.estimation < right.cost + right.estimation
+
+def aStar(board, alg=heuristic):
     
-    root = Node(board, 0, countElements(board)//2, alg)
+    root = Node(board, 0, alg(board), lessthan)
 
     boards = getAllBoards(board)
 
@@ -14,7 +16,7 @@ def aStar(board, alg=aStarHeuristic):
     skip = 0
     
     for move, b in boards:
-        node = Node(b, root.cost + (0 if move == "deal" else 1), countElements(b)//2, alg)
+        node = Node(b, root.cost + (0 if move == "deal" else 1), alg(b), lessthan)
         edge = Edge(move, root, node)
 
         root.add_edge(edge)
@@ -34,7 +36,7 @@ def aStar(board, alg=aStarHeuristic):
                 skip += 1
                 continue
             
-            child = Node(b, node.cost + (0 if move == "deal" else 1), countElements(b)//2, alg)
+            child = Node(b, node.cost + (0 if move == "deal" else 1), alg(b), lessthan)
             edge = Edge(move, node, child)
             node.add_edge(edge)
             heappush(queue, child)

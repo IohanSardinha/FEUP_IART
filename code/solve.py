@@ -40,30 +40,30 @@ def main(argv):
         print("Bad level number, must be between 0 and 6!")
         return
 
-    try:
-        board, moves = initialState(level)
-        moves = []
-        if alg == "BFS":
-            moves, time_s = timeToRun(lambda : BFS(board), 1)
-        elif alg == "DFS":
-            moves, time_s = timeToRun(lambda : DFS(board), 1)
-        elif alg == "IDEP":
-            moves, time_s = timeToRun(lambda : IDDFS(board, maxDepth), 1)
-        elif alg == "GREEDY":
-            moves, time_s = timeToRun(lambda : greedy(board), 1)
-        elif alg == "A*":
-            moves, time_s = timeToRun(lambda : aStar(board), 1)
-        else:
-            print("Bad algorithm, must be BFS, DFS, IDEP or A*")
-            return
+    # try:
+    board, moves = initialState(level)
+    moves = []
+    if alg == "BFS":
+        moves, time_s = timeToRun(lambda : BFS(board), 1)
+    elif alg == "DFS":
+        moves, time_s = timeToRun(lambda : DFS(board), 1)
+    elif alg == "IDEP":
+        moves, time_s = timeToRun(lambda : IDDFS(board, maxDepth), 1)
+    elif alg == "GREEDY":
+        moves, time_s = timeToRun(lambda : greedy(board), 1)
+    elif alg == "A*":
+        moves, time_s = timeToRun(lambda : aStar(board), 1)
+    else:
+        print("Bad algorithm, must be BFS, DFS, IDEP or A*")
+        return
 
-        print(alg + " solution solved in " + str(time_s) + " seconds")
-        print("Solution:")
-        for move in moves:
-            print(move)
+    print(alg + " solution solved in " + str(time_s) + " seconds")
+    print("Solution:")
+    for move in moves:
+        print(move)
 
-    except:
-        print("Something went wrong!")
+    # except:
+    #     print("Something went wrong!")
 
 
 
