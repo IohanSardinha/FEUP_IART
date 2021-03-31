@@ -6,6 +6,7 @@ from bfs import BFS
 from dfs import DFS
 from itdep import IDDFS
 from astar import aStar
+from greedy import greedy
 from time import time
 
 
@@ -158,18 +159,23 @@ def calculateSolution(screen, clock, selectedLevel, selectedAlg):
     pygame.display.update()
     
     board, moves = initialState(selectedLevel)
+
+    maxDepth = 25
     
     if selectedAlg == "BFS":
         solution, time_s = timeToRun(lambda : BFS(board), 1)
     elif selectedAlg == "DFS":
-        solution, time_s = timeToRun(lambda : DFS(board), 1)
+        solution, time_s = timeToRun(lambda : DFS(board,shouldDealOnlyFirst=True), 1)
     elif selectedAlg == "IDEP":
         solution, time_s = timeToRun(lambda : IDDFS(board, maxDepth), 1)
+    elif selectedAlg == "GREEDY":
+        solution, time_s = timeToRun(lambda : greedy(board), 1)
     elif selectedAlg == "A*":
         solution, time_s = timeToRun(lambda : aStar(board), 1)
 
+    print("Solution generated in: "+str(time_s)+" seconds")
     
-    sleep(0.01)
+    sleep(0.5)
 
     return lambda: showSolution(screen, clock, board, moves, solution)
 

@@ -4,21 +4,20 @@ from os import system
 from heapq import *
 
 class Node(object):
-    def __init__(self, data, cost=None, estimation=None):
+    def __init__(self, data, cost=None, estimation=None, alg=None):
         self.data = data
         self.edges = []
         self.parents = []
         self.cost = cost
         self.estimation = estimation
+        self.lessthan = alg
 
     def add_edge(self, obj):
         self.edges.append(obj)
 
+
     def __lt__(self, other):
-        if (self.cost + self.estimation < other.cost + other.estimation):
-            return True
-        else:
-            return False    
+        return self.lessthan(self, other)
 
 class Edge(object):
     def __init__(self, data, fromNode, toNode):

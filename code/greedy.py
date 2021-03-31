@@ -1,10 +1,9 @@
 from ai import *
 from heuristics import *
 
+lessthan = lambda left, right: left.estimation < right.estimation
 
-lessthan = lambda left, right: left.cost + left.estimation < right.cost + right.estimation
-
-def aStar(board, alg=heuristic):
+def greedy(board, alg=heuristic):
     
     root = Node(board, 0, alg(board), lessthan)
 
@@ -26,11 +25,14 @@ def aStar(board, alg=heuristic):
         node = heappop(queue)
         
         visited.append(str(node.data))
+        
 
         if win(node.data):
             return node
 
-        for move, b in getAllBoards(node.data):                
+        allBoards = getAllBoards(node.data)
+
+        for move, b in allBoards:           
             
             if str(b) in visited:                    
                 skip += 1
