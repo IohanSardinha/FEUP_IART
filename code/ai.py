@@ -86,4 +86,21 @@ def getAllBoards(board, shouldDeal=True):
     if shouldDeal:
         newBoard = [l[:] for l in board]
         boards.append((("( deal )"), deal(newBoard)))
-    return boards    
+    return boards
+
+def getMoves(node):
+    path = []
+    while node.parents != []:
+        path.append(node.parents[0].data)
+        node = node.parents[0].fromNode
+    
+    return path[::-1]    
+
+def timeToRun(func, n=50):
+    times=[]
+    for _ in range(n):
+        start = time()
+        ret = func()
+        end = time()
+        times.append(end-start)
+    return getMoves(ret), (sum(times)/len(times))
