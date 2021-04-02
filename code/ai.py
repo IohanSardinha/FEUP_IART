@@ -15,6 +15,9 @@ class Node(object):
     def add_edge(self, obj):
         self.edges.append(obj)
 
+    def toString(self):
+        return str(self.cost)+", "+str(self.estimation)
+
 
     def __lt__(self, other):
         return self.lessthan(self, other)
@@ -90,8 +93,10 @@ def getAllBoards(board, shouldDeal=True):
 
 def getMoves(node):
     path = []
+    nodes = []
     while node.parents != []:
         path.append(node.parents[0].data)
+        nodes.append(node)
         node = node.parents[0].fromNode
     
     return path[::-1]    

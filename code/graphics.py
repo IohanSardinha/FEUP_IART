@@ -11,31 +11,42 @@ from time import time
 
 
 selectedPiece = (-1,-1)
+hintPiece1 = (-1,-1)
+hintPiece2 = (-1,-1)
 
-def drawBoard(board, screen, fontsmall, fontbig, moves):
+def drawBoard(board, screen, fontsmall, fontbig, moves, showDeal = True):
     startx, starty = (15,40)
 
-    deal = pygame.draw.rect(screen, (210,210,210), pygame.Rect(245, 10, 40,25))
-    screen.blit( fontsmall.render("Deal", False, (0,0,0)) ,(248, 10))
+    deal = None
+    if showDeal:
+        deal = pygame.draw.rect(screen, (0,0,255) if hintPiece1 == "( deal )" else (210,210,210), pygame.Rect(245, 10, 40,25))
+        screen.blit( fontsmall.render("Deal", False, (255,255,0) if hintPiece1 == "( deal )" else (0,0,0)) ,(248, 10))
 
     screen.blit( fontsmall.render("Moves: "+str(moves), False, (255,255,255)) ,(startx, 10))
 
     numbers = []
     for i, line in enumerate(board):
         for j, value in enumerate(line):
-            screen.blit( fontbig.render(" " if value == 0 else str(value), False, (255,255,0) if selectedPiece == (j, i) else (255,255,255)) ,(startx+ j*30 + 8, starty + i*30 - 3))
-            number = pygame.draw.rect(screen, (255,255,0) if selectedPiece == (j, i) else (255,255,255), pygame.Rect(startx+ j*30, starty+ i*30, 30,30),1)
+            btnColor =(255,255,0) if selectedPiece == (j, i) else (0,0,255) if (hintPiece1 == (j,i) or hintPiece2 == (j,i)) else (255,255,255)
+            txtColor =(255,255,0) if selectedPiece == (j, i) else (100,100,255) if (hintPiece1 == (j,i) or hintPiece2 == (j,i)) else (255,255,255)
+            screen.blit( fontbig.render(" " if value == 0 else str(value), False, txtColor ) ,(startx+ j*30 + 8, starty + i*30 - 3))
+            number = pygame.draw.rect(screen, btnColor , pygame.Rect(startx+ j*30, starty+ i*30, 30,30),1)
             numbers.append((number, j, i, value))
     return numbers, deal
 
 def pieceClick(board, moves, i, j, value):
 
-    global selectedPiece
+    global selectedPiece,hintPiece1,hintPiece2
 
     if value == 0:
-        pass
+        return board, moves
+
+    if hintPiece1 == (i,j):
+        hintPiece1 = (-1,-1)
+    elif hintPiece2 == (i,j):
+        hintPiece2 = (-1,-1)
     
-    elif selectedPiece == (-1,-1):
+    if selectedPiece == (-1,-1):
         selectedPiece = (i,j)
         
     elif selectedPiece == (i,j):
@@ -51,8 +62,19 @@ def pieceClick(board, moves, i, j, value):
 
     return board, moves
 
-def humanPlayer(screen, clock):
-    level = 0
+def showHint(board):
+    global hintPiece1, hintPiece2
+    result = greedy(board)
+    hintMove = getMoves(result)[0]
+    if hintMove == "( deal )":
+        hintPiece1 = hintMove
+    else:
+        hintPiece1 = hintMove[0]
+        hintPiece2 = hintMove[1]
+    print(hintPiece1)
+
+def humanPlayer(screen, clock, level):
+    global hintPiece1, hintPiece2
 
     board, moves = initialState(level)
 
@@ -64,6 +86,9 @@ def humanPlayer(screen, clock):
 
         numbers, dealButton = drawBoard(board, screen, fontsmall, fontbig, moves)
 
+        hintButton = pygame.draw.rect(screen, (210,210,210), pygame.Rect(185, 10, 40,25))
+        screen.blit( fontsmall.render("Hint", False, (0,0,0)) ,(188, 10))
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False
@@ -71,6 +96,10 @@ def humanPlayer(screen, clock):
                 mousePos = pygame.mouse.get_pos()
                 if dealButton.collidepoint(mousePos):
                     board = deal(board)
+                    hintPiece1 = (-1,-1)
+                    hintPiece2 = (-1,-1)
+                elif hintButton.collidepoint(mousePos):
+                    showHint(board)  
                 else:
                     for number, i, j ,value in numbers:
                         if number.collidepoint(mousePos):
@@ -78,12 +107,7 @@ def humanPlayer(screen, clock):
 
         if win(board):
             print("Congratulations you won level "+str(level)+" in "+str(moves)+" moves!!!")
-            
-            if level < initialState(size=True):
-                level += 1
-                board, moves = initialState(level)
-            else:
-                return True
+            return lambda: mainMenu(screen, clock)
         
         pygame.display.update()
         clock.tick(60)
@@ -122,13 +146,13 @@ def showSolution(screen, clock, board, moves, solution):
 
     for move in solution:
         screen.fill((0,0,0))
-        numbers, dealButton = drawBoard(board, screen, fontsmall, fontbig, moves)
+        numbers, dealButton = drawBoard(board, screen, fontsmall, fontbig, moves, False)
         playing =  playStopButton(screen, clock, playing)
 
         if move == "( deal )":
             board = deal(board)
             screen.fill((0,0,0))
-            numbers, dealButton = drawBoard(board, screen, fontsmall, fontbig, moves)
+            numbers, dealButton = drawBoard(board, screen, fontsmall, fontbig, moves, False)
             playing =  playStopButton(screen, clock, playing)
             
         else:
@@ -138,14 +162,14 @@ def showSolution(screen, clock, board, moves, solution):
             selectedPiece = (numbers[pos][1],numbers[pos][2])
 
             screen.fill((0,0,0))
-            numbers, dealButton = drawBoard(board, screen, fontsmall, fontbig, moves)
+            numbers, dealButton = drawBoard(board, screen, fontsmall, fontbig, moves, False)
             playing =  playStopButton(screen, clock, playing)
                 
             pos = p2[1]*len(board[0])+p2[0]
             board, moves = pieceClick(board, moves, p2[0], p2[1], numbers[pos][3])
         
     screen.fill((0,0,0))
-    numbers, dealButton = drawBoard(board, screen, fontsmall, fontbig, moves)
+    numbers, dealButton = drawBoard(board, screen, fontsmall, fontbig, moves, False)
     playing =  playStopButton(screen, clock, playing)
     
     return lambda: mainMenu(screen, clock)
@@ -172,14 +196,48 @@ def calculateSolution(screen, clock, selectedLevel, selectedAlg):
         solution, time_s = timeToRun(lambda : greedy(board), 1)
     elif selectedAlg == "A*":
         solution, time_s = timeToRun(lambda : aStar(board), 1)
-
+    
     print("Solution generated in: "+str(time_s)+" seconds")
     
     sleep(0.5)
 
     return lambda: showSolution(screen, clock, board, moves, solution)
 
-    
+def selectLevel(screen, clock):
+    selectedLevel = 0
+    selectedAlg = "BFS"
+    while True:
+        screen.fill((0,0,0))
+        font1 = pygame.font.SysFont('Arial', 30)
+        font2 = pygame.font.SysFont('Arial bold', 30)
+        screen.blit( font1.render("Level:", False, (200,200,255)) ,(20, 20))
+
+        back_button = pygame.draw.rect(screen, (0,0,0), pygame.Rect(0, 0, 30, 25))
+        screen.blit( font2.render("<--", False, (210,210,210)) ,(3, 2))
+
+        levels = []
+        for i in range( len(LEVELS())):
+            lvl = pygame.draw.rect(screen, (210,210,210), pygame.Rect(20+35*(i%7), 60+35*(i//7), 30, 30))
+            levels.append((lvl, i))
+            screen.blit( font2.render(str(i+1), False, (0,0, 0)) ,(29+35*(i%7), 65+35*(i//7)))
+
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mousePos = pygame.mouse.get_pos()
+
+                if back_button.collidepoint(mousePos):
+                    return mainMenu(screen, clock)
+
+                for btn, i in levels:
+                    if btn.collidepoint(mousePos):
+                        return lambda : humanPlayer(screen, clock, i)
+                
+        
+        pygame.display.update()
+        clock.tick(60)   
 
 def solveMenu(screen, clock):
     selectedLevel = 0
@@ -190,13 +248,17 @@ def solveMenu(screen, clock):
         font2 = pygame.font.SysFont('Arial bold', 30)
         font3 = pygame.font.SysFont('Arial bold', 20)
         font4 = pygame.font.SysFont('Arial', 40)
+
+        back_button = pygame.draw.rect(screen, (0,0,0), pygame.Rect(0, 0, 30, 25))
+        screen.blit( font2.render("<--", False, (210,210,210)) ,(3, 2))
+        
         screen.blit( font1.render("Level:", False, (200,200,255)) ,(20, 20))
 
         levels = []
-        for i in range(7):
+        for i in range( len(LEVELS())):
             lvl = pygame.draw.rect(screen, (210,210,0) if selectedLevel == i else (210,210,210), pygame.Rect(20+35*(i%7), 60+35*(i//7), 30, 30))
             levels.append((lvl, i))
-            screen.blit( font2.render(str(i), False, (0,0, 0)) ,(29+35*(i%8), 65+35*(i//8)))
+            screen.blit( font2.render(str(i+1), False, (0,0, 0)) ,(29+35*(i%7), 65+35*(i//7)))
 
         screen.blit( font1.render("Algorithm:", False, (200,200,255)) ,(20, 200))
         BFS_button = pygame.draw.rect(screen, (210,210,0) if selectedAlg == "BFS" else (210,210,210), pygame.Rect(70, 245, 150, 30))
@@ -235,6 +297,8 @@ def solveMenu(screen, clock):
                     selectedAlg = "A*"
                 elif solve_button.collidepoint(mousePos):
                     return lambda: calculateSolution(screen,clock, selectedLevel, selectedAlg)
+                elif back_button.collidepoint(mousePos):
+                    return mainMenu(screen, clock)
         
         pygame.display.update()
         clock.tick(60) 
@@ -256,8 +320,8 @@ def mainMenu(screen, clock):
         screen.blit( fontButton.render("PLAY", False, (0,0, 0)) ,(100, 160))
         solve_button =     pygame.draw.rect(screen, (210,210,210), pygame.Rect(60, 210, 170, 50))
         screen.blit( fontButton.render("SOLVE", False, (0,0, 0)) ,(90, 220))
-        #howtoplay_button = pygame.draw.rect(screen, (210,210,210), pygame.Rect(60, 270, 170, 50))
-        #screen.blit( fontButton2.render("HOW TO PLAY", False, (0,0, 0)) ,(65, 285))
+        quit_button =     pygame.draw.rect(screen, (210,210,210), pygame.Rect(60, 210+60, 170, 50))
+        screen.blit( fontButton.render("QUIT", False, (0,0, 0)) ,(105, 220+60))
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -265,11 +329,11 @@ def mainMenu(screen, clock):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mousePos = pygame.mouse.get_pos()
                 if play_button.collidepoint(mousePos):
-                    return lambda: humanPlayer(screen, clock)
-                if solve_button.collidepoint(mousePos):
+                    return lambda: selectLevel(screen, clock)
+                elif solve_button.collidepoint(mousePos):
                     return lambda: solveMenu(screen, clock)
-                #if howtoplay_button.collidepoint(mousePos):
-                 #   return lambda: howToPlayMenu(screen, clock)
+                elif quit_button.collidepoint(mousePos):
+                    return False
         
         pygame.display.update()
         clock.tick(60) 

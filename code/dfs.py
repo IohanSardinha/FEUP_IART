@@ -11,7 +11,7 @@ def DFSNode(node, depth = -1, shouldDealOnlyFirst=False, isFirst=True):
         return False
     
     for move, board in allBoards:
-        child = Node(board)
+        child = Node(board, node.cost + int(move != "( deal )"))
         edge = Edge(move, node, child)
         node.add_edge(edge)
         
@@ -23,13 +23,11 @@ def DFSNode(node, depth = -1, shouldDealOnlyFirst=False, isFirst=True):
         if not retChild == False:
             return retChild
         
-        
-        
         if not retChild == False:
             return retChild
         
     return False
 
 def DFS(board, depth=-1, shouldDealOnlyFirst=False):
-    node = Node(board)
+    node = Node(board, 0)
     return DFSNode(node, depth, shouldDealOnlyFirst)

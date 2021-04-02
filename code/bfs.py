@@ -2,7 +2,7 @@ from ai import *
 
 def BFS(board, noRepeat=False, shouldDealOnlyFirst=False):
 
-    root = Node(board)
+    root = Node(board, 0)
 
     boards = getAllBoards(board)
     newBoard = [l[:] for l in board]
@@ -14,7 +14,7 @@ def BFS(board, noRepeat=False, shouldDealOnlyFirst=False):
         visited = []
     
     for move, b in boards:
-        node = Node(b)
+        node = Node(b, root.cost + (0 if move == "( deal )" else 1))
         edge = Edge(move, root, node)
         queue.append(node)
 
@@ -32,7 +32,7 @@ def BFS(board, noRepeat=False, shouldDealOnlyFirst=False):
             if noRepeat and str(b) in visited:                    
                 continue
             
-            child = Node(b)
+            child = Node(b, node.cost + (0 if move == "( deal )" else 1))
             edge = Edge(move, node, child)
             node.add_edge(edge)
             queue.append(child)

@@ -14,7 +14,7 @@ def IDDFSNode(node, depth):
         return False
     
     for move, board in allBoards:
-        child = Node(board)
+        child = Node(board, node.cost + int(move != "( deal )"))
         edge = Edge(move, node, child)
         node.add_edge(edge)
         
@@ -26,7 +26,7 @@ def IDDFSNode(node, depth):
     return False
 
 def IDDFS(board, maxDepth):
-    node = Node(board)
+    node = Node(board, 0)
     for i in range(0, maxDepth):
         result = IDDFSNode(node, i)
         if not result == False:

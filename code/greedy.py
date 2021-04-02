@@ -3,7 +3,7 @@ from heuristics import *
 
 lessthan = lambda left, right: left.estimation < right.estimation
 
-def greedy(board, alg=heuristic3):
+def greedy(board, alg=heuristic):
     
     root = Node(board, 0, alg(board), lessthan)
 
@@ -15,7 +15,7 @@ def greedy(board, alg=heuristic3):
     skip = 0
     
     for move, b in boards:
-        node = Node(b, root.cost + (0 if move == "deal" else 1), alg(b), lessthan)
+        node = Node(b, root.cost + (0 if move == "( deal )" else 1), alg(b), lessthan)
         edge = Edge(move, root, node)
 
         root.add_edge(edge)
@@ -40,7 +40,7 @@ def greedy(board, alg=heuristic3):
                 skip += 1
                 continue
             
-            child = Node(b, node.cost + (0 if move == "deal" else 1), alg(b), lessthan)
+            child = Node(b, node.cost + (0 if move == "( deal )" else 1), alg(b), lessthan)
             edge = Edge(move, node, child)
             node.add_edge(edge)
             heappush(queue, child)

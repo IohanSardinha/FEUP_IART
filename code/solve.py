@@ -11,7 +11,7 @@ from greedy import greedy
 def main(argv):
     maxDepth = -1
     if len(argv) == 0:
-        level = int(input("Level[0-6]: "))
+        level = int(input("Level[0-"+str(len(LEVELS())-1)+"]: "))
         alg = input("Algorithm[BFS, DFS, IDEP, Greedy, A*]: ")
         if alg == 'IDEP':
             maxDepth = int(input("Max depth: "))
@@ -36,8 +36,8 @@ def main(argv):
         print("Usage: python solve.py [level] [algorithm [maxDepth]]")
         return
 
-    if level < 0 or level > 6:
-        print("Bad level number, must be between 0 and 6!")
+    if level < 0 or level >= len(LEVELS()):
+        print("Bad level number, must be between 0 and "+str(len(LEVELS())-1)+"!")
         return
 
     board, moves = initialState(level)
@@ -47,7 +47,7 @@ def main(argv):
     elif alg == "DFS":
         moves, time_s = timeToRun(lambda : DFS(board), 1)
     elif alg == "IDEP":
-        moves, time_s = timeToRun(lambda : IDDFS(board, maxDepth), 1)
+        moves, time_s = timeToRun(lambda : IDDFS(board, maxDepth+1), 1)
     elif alg == "GREEDY":
         moves, time_s = timeToRun(lambda : greedy(board), 1)
     elif alg == "A*":
@@ -64,4 +64,5 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    while True:
+        main(sys.argv[1:])
