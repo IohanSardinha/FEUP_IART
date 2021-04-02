@@ -71,14 +71,14 @@ Using the python shell the algorithms can be used not only to solve the 7 levels
 
 First by importing [ai.py](code/ai.py) and [tenpair.py](code/tenpair.py) which contains the game logic and the functions for solving
 
-```bash
+```python
 >>> from tenpair import *
 >>> from ai import *
 ```
 
 The importing the desired algorithm, for exemple A*
 
-```bash
+```python
 >>> from astar import aStar
 ```
 
