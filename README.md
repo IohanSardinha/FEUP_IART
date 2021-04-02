@@ -43,7 +43,15 @@ The search algorithms are implemented each one in a single file
 | Breadth-first Search | [bfs.py](code/bfs.py) |
 | Depth-first Search | [dfs.py](code/dfs.py) |
 | Iterative Deepening | [idep.py](code/idep.py) |
+| Greedy Search | [greedy.py](code/greedy.py) |
 | A* | [astar.py](code/astar.py) |
+
+## Using graphic interface
+
+The same graphical interface that can be used to play the game can be used to solve and watch the solution for nine available levels, running:
+```bash
+python3 graphics.py
+```
 
 ### Using solver
 
@@ -53,7 +61,7 @@ The solution for a game can be found by using [solve.py](code/solve.py)
 python3 solve.py [level] [algorithm [maxDepth] ]
 ```
 
-- level is a number from 0 to 6
+- level is a number from 0 to 8
 - algorithm is a string that can be BFS, DFS, IDEP or A*
 - maxDepth is the maximum depth to be used by the iterative deepening algorithm
 
@@ -76,11 +84,11 @@ The importing the desired algorithm, for exemple A*
 
 Then to solve both the imported method, in this exemple aStar, or the timeToRun wich will return the time that it took to compute the solution, can be used
 
-```bash
+```python
 >>> board = [[1,2,1],[3,3,3],[1,2,1]]
 >>> moves, run_time = timeToRun(lambda: aStar(board), 1)
->> for move in moves:
-			print(move)
+>>> for move in moves:
+	print(move)
 ```
 
 ## Data Analisys
