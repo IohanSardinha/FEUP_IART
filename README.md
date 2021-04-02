@@ -67,7 +67,7 @@ python3 solve.py [level] [algorithm [maxDepth] ]
 
 ### Using python shell
 
-Using the python shell the algorithms can be used not only to solve the 7 levels but any custom board.
+Using the python shell the algorithms can be used not only to solve the 9 levels but any custom board.
 
 First by importing [ai.py](code/ai.py) and [tenpair.py](code/tenpair.py) which contains the game logic and the functions for solving
 
@@ -93,4 +93,4 @@ Then to solve both the imported method, in this exemple aStar, or the timeToRun 
 
 ## Data Analisys
 
-For the 7 pre-ready levels of the game some data was collected and analised by plotting some graphs using matplotlib and the results can be observed in [dataAnalisys.ipynb](code/dataAnalisys.ipynb)
+For the nine pre-ready levels of the game some data was collected and analised by plotting some graphs using matplotlib and the results can be observed in [dataAnalisys.ipynb](code/dataAnalisys.ipynb)
