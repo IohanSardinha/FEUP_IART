@@ -169,7 +169,10 @@ def initialState(level = -1, size=False):
     return LEVELS()[level], 0
 
 def main():
-    board,moves = initialState(0)
+
+    level = int(input("Choose a level[0-"+str(len(LEVELS())-1)+"]: "))
+    
+    board,moves = initialState(level)
 
     while True:
         showBoard(board, moves)
@@ -178,8 +181,23 @@ def main():
         if input1.lower()  == "deal":
             board = deal(board)
             continue
+
+        if input1.lower() == "help":
+            print("Type 'deal', two numbers or 'help'")
+            continue
+
+        if not input1.isnumeric():
+            print("Invalid input! Type help for help\n\n")
+            continue
         
         input2 = input("> ")
+        if input2.lower() == "help":
+            print("Type 'deal', two numbers or 'help'")
+            continue
+        if not input2.isnumeric():
+            print("Invalid input! Type help for help\n\n")
+            continue
+        
         p1 = list(map(int,input1.split(" ")))
         p2 = list(map(int,input2.split(" ")))
         

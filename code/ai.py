@@ -101,11 +101,11 @@ def getMoves(node):
     
     return path[::-1]    
 
-def timeToRun(func, n=50):
+def timeToRun(func, n=1):
     times=[]
     for _ in range(n):
         start = time()
         ret = func()
         end = time()
         times.append(end-start)
-    return getMoves(ret), (sum(times)/len(times))
+    return getMoves(ret), ret.cost , (sum(times)/len(times))

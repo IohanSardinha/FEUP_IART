@@ -71,7 +71,6 @@ def showHint(board):
     else:
         hintPiece1 = hintMove[0]
         hintPiece2 = hintMove[1]
-    print(hintPiece1)
 
 def humanPlayer(screen, clock, level):
     global hintPiece1, hintPiece2
@@ -170,7 +169,8 @@ def showSolution(screen, clock, board, moves, solution):
         
     screen.fill((0,0,0))
     numbers, dealButton = drawBoard(board, screen, fontsmall, fontbig, moves, False)
-    playing =  playStopButton(screen, clock, playing)
+    playing = False
+    playing =  playStopButton(screen, clock, playing, 1)
     
     return lambda: mainMenu(screen, clock)
 
@@ -187,17 +187,17 @@ def calculateSolution(screen, clock, selectedLevel, selectedAlg):
     maxDepth = 25
     
     if selectedAlg == "BFS":
-        solution, time_s = timeToRun(lambda : BFS(board), 1)
+        solution, cost, time_s = timeToRun(lambda : BFS(board), 1)
     elif selectedAlg == "DFS":
-        solution, time_s = timeToRun(lambda : DFS(board,shouldDealOnlyFirst=True), 1)
+        solution, cost, time_s = timeToRun(lambda : DFS(board,shouldDealOnlyFirst=True), 1)
     elif selectedAlg == "IDEP":
-        solution, time_s = timeToRun(lambda : IDDFS(board, maxDepth), 1)
+        solution, cost, time_s = timeToRun(lambda : IDDFS(board, maxDepth), 1)
     elif selectedAlg == "GREEDY":
-        solution, time_s = timeToRun(lambda : greedy(board), 1)
+        solution, cost, time_s = timeToRun(lambda : greedy(board), 1)
     elif selectedAlg == "A*":
-        solution, time_s = timeToRun(lambda : aStar(board), 1)
+        solution, cost, time_s = timeToRun(lambda : aStar(board), 1)
     
-    print("Solution generated in: "+str(time_s)+" seconds")
+    print(selectedAlg + " found a "+str(cost)+" cost solution in " + str(time_s) + " seconds")
     
     sleep(0.5)
 
