@@ -14,7 +14,7 @@ This way this the problem can be interpreted as a classification problem with fo
 
 ---
 
-The full project was done in python using the following frameworks, wich must be installed in order to run it:
+The full project was done in python 2.7 and Anaconda using the following frameworks, wich must be installed in order to run it:
 
 - Sklearn
 - Matplotlib
@@ -22,4 +22,4 @@ The full project was done in python using the following frameworks, wich must be
 - pandas
 - joblib
 
-The code is available in a [jupyter notebook](/convid.ipynb) , with the comments about the process and conclusion
+The code is available in a [jupyter notebook](/covid.ipynb) , with the comments about the process and conclusion
