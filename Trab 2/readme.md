@@ -22,4 +22,4 @@ The full project was done in python 2.7 and Anaconda using the following framewo
 - pandas
 - joblib
 
-The code is available in a [jupyter notebook](/covid.ipynb) , with the comments about the process and conclusion
+The code is available in a [jupyter notebook](covid.ipynb) , with the comments about the process and conclusion
